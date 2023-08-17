@@ -37,6 +37,8 @@ import {
 } from "./actions";
 import axios from "axios";
 
+const backendApi = "http://localhost:5000";
+
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
 const userLocation = localStorage.getItem("location");
@@ -78,7 +80,7 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const authFetch = axios.create({
-    baseURL: "/api/v1",
+    baseURL: `${process.env.REACT_APP_BASE_URL}/api/v1`,
   });
   // request
   authFetch.interceptors.request.use(
@@ -128,7 +130,10 @@ const AppProvider = ({ children }) => {
   const registerUser = async (currentUser) => {
     dispatch({ type: REGISTER_USER_BEGIN });
     try {
-      const response = await axios.post("/api/v1/auth/register", currentUser);
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/auth/register`,
+        currentUser
+      );
       //  console.log(response);
       const { user, token, location } = response.data;
       dispatch({
@@ -149,7 +154,10 @@ const AppProvider = ({ children }) => {
   const loginUser = async (currentUser) => {
     dispatch({ type: LOGIN_USER_BEGIN });
     try {
-      const { data } = await axios.post("/api/v1/auth/login", currentUser);
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`,
+        currentUser
+      );
       const { user, token, location } = data;
       dispatch({
         type: LOGIN_USER_SUCCESS,
@@ -168,7 +176,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SETUP_USER_BEGIN });
     try {
       const { data } = await axios.post(
-        `/api/v1/auth/${endPoint}`,
+        `${process.env.REACT_APP_BASE_URL}/api/v1/auth/${endPoint}`,
         currentUser
       );
       const { user, token, location } = data;
@@ -196,7 +204,10 @@ const AppProvider = ({ children }) => {
   const updateUser = async (currentUser) => {
     dispatch({ type: UPDATE_USER_BEGIN });
     try {
-      const { data } = await authFetch.patch("/auth/updateUser", currentUser);
+      const { data } = await authFetch.patch(
+        `${process.env.REACT_APP_BASE_URL}/auth/updateUser`,
+        currentUser
+      );
 
       // no token
       const { user, location, token } = data;

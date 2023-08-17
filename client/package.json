@@ -42,5 +42,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://jobify-kqe4.onrender.com"
+  "devDependencies": {
+    "dotenv": "^16.3.1"
+  }
 }
